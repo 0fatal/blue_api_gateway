@@ -9,21 +9,20 @@ see [midway docs][midway] for more detail.
 ### Development
 
 ```bash
-$ npm i
-$ npm run dev
+$ pnpm i
+$ pnpm run dev
 $ open http://localhost:7001/
 ```
 
 ### Deploy
 
 ```bash
-$ npm start
+$ pnpm start
 ```
 
 ### npm scripts
 
-- Use `npm run lint` to check code style.
-- Use `npm test` to run unit test.
-
+-   Use `pnpm run lint` to check code style.
+-   Use `pnpm test` to run unit test.
 
 [midway]: https://midwayjs.org
