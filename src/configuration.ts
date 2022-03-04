@@ -5,15 +5,17 @@ import * as info from '@midwayjs/info'
 import { join } from 'path'
 // import { DefaultErrorFilter } from './filter/default.filter';
 // import { NotFoundFilter } from './filter/notfound.filter';
-import { ReportMiddleware } from './middleware/report.middleware'
 import 'tsconfig-paths/register'
 import * as orm from '@midwayjs/orm'
+import { AuthMiddleware } from '@/middleware/auth/auth.middleware'
+import * as crossDomain from '@midwayjs/cross-domain'
 
 @Configuration({
     imports: [
         koa,
         validate,
         orm,
+        crossDomain,
         {
             component: info,
             enabledEnvironment: ['local'],
@@ -27,7 +29,7 @@ export class ContainerLifeCycle {
 
     async onReady() {
         // add middleware
-        this.app.useMiddleware([ReportMiddleware])
+        this.app.useMiddleware([AuthMiddleware])
         // add filter
         // this.app.useFilter([NotFoundFilter, DefaultErrorFilter]);
     }
