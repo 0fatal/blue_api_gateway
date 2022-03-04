@@ -11,3 +11,8 @@ type PropertyName<T> = {
 export type ClassFunc<M> = { [T in FuncName<M>]?: M[T] }
 
 export type ClassProperty<M> = { [T in PropertyName<M>]?: M[T] }
+
+/**
+ * Exclude from M those types that are assignable to E
+ */
+export type ClassPropertyWithExcludeExtend<M, E> = ClassProperty<Exclude<M, E>>
