@@ -23,6 +23,22 @@ export class RouteItem {
     @Column({ comment: '是否需要回调' })
     needRedirect: boolean
 
+    @Column({
+        array: true,
+        type: 'varchar',
+        length: 20,
+        comment: 'DirectThroughRequestHeaders',
+    })
+    DirectThroughRequestHeaders: string[]
+
+    @Column({
+        array: true,
+        type: 'varchar',
+        length: 20,
+        comment: 'DirectThroughResponseHeaders',
+    })
+    DirectThroughResponseHeaders: string[]
+
     @Column({ comment: '远端路径' })
     remote: string
 
@@ -47,9 +63,8 @@ export class RouteItem {
         defineProperties(this, props)
     }
 
-    async makeNewRemoteRequest(): Promise<request.Response> {
-        const req = request((await this.remoteUrl()).toString())
-        req.method = this.method
+    makeNewRemoteRequest(): request.SuperAgentRequest {
+        const req = request(this.method, this.remoteUrl().toString())
         return req
     }
 }
