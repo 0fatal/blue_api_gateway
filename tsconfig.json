@@ -18,11 +18,11 @@
     "paths": {
       "@/*": [ "./src/*" ],
     },
-    "noImplicitAny": false
+    "noImplicitAny": false,
   },
   "exclude": [
     "dist",
     "node_modules",
     "test"
-  ]
+  ],
 }
