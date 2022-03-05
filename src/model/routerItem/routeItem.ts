@@ -1,8 +1,10 @@
 import { CustomException } from '@/exception'
+import { AuthService } from '@/service/Auth/Auth.service'
 import { ServerService } from '@/service/Server/Server'
 import { ClassProperty } from '@/types'
 import { defineProperties } from '@/utils/base'
 import { Inject } from '@midwayjs/decorator'
+import { Context } from '@midwayjs/koa'
 import { EntityModel } from '@midwayjs/orm'
 import request = require('superagent')
 import { Column } from 'typeorm'
@@ -48,6 +50,9 @@ export class RouteItem {
     @Inject()
     serverService: ServerService
 
+    @Inject()
+    authService: AuthService
+
     async remoteUrl(): Promise<URL> {
         // return ''
         const server = await this.serverService.getServer(this.father)
@@ -66,5 +71,14 @@ export class RouteItem {
     makeNewRemoteRequest(): request.SuperAgentRequest {
         const req = request(this.method, this.remoteUrl().toString())
         return req
+    }
+
+    checkScope(ctx: Context) {
+        if (this.needAuthorized) {
+            const authStatus = this.authService.getAuthStatus(ctx)
+            if (!authStatus.isValid()) {
+                throw CustomException.Make('UNAUTHORIZED')
+            }
+        }
     }
 }
