@@ -4,19 +4,24 @@ import { BaseEntityModel } from '../BaseEntityModel'
 
 @EntityModel('access_token')
 export class AccessToken extends BaseEntityModel {
-    @Column({ comment: '学工号', length: 10 })
+    @Column({ comment: '学工号', length: 10, type: 'varchar', nullable: false })
     staffID: string
 
-    @Column()
+    @Column({ comment: 'user-agent', length: 255, type: 'varchar' })
     userAgent: string
 
-    @Column()
+    @Column({ type: 'timestamp', nullable: false })
     expiredTime: Date
 
-    @Column()
+    @Column({ type: 'varchar', length: '20' })
     ip: string
 
-    @Column({ unique: true, comment: 'access_token', length: 191 })
+    @Column({
+        comment: 'access_token',
+        type: 'varchar',
+        length: 191,
+        nullable: false,
+    })
     accessToken: string
 
     isValid(): boolean {

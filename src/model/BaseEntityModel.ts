@@ -6,15 +6,15 @@ import {
 } from 'typeorm'
 
 export class BaseEntityModel {
-    @PrimaryGeneratedColumn()
+    @PrimaryGeneratedColumn({ type: 'bigint' })
     id: number
 
-    @CreateDateColumn()
+    @CreateDateColumn({ type: 'timestamp' })
     createdAt: Date
 
-    @DeleteDateColumn()
+    @DeleteDateColumn({ type: 'timestamp' })
     deletedAt: Date
 
-    @UpdateDateColumn()
+    @UpdateDateColumn({ type: 'timestamp' })
     updatedAt: Date
 }
