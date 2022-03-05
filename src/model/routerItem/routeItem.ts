@@ -1,6 +1,6 @@
 import { CustomException } from '@/exception'
 import { AuthService } from '@/service/Auth/Auth.service'
-import { ServerService } from '@/service/Server/Server'
+import { ServerService } from '@/service/Server/Server.service'
 import { ClassPropertyWithExcludeExtend } from '@/types'
 import { defineProperties } from '@/utils/base'
 import { Inject } from '@midwayjs/decorator'

@@ -14,18 +14,22 @@ export class AuthMiddleware implements IMiddleware<Context, NextFunction> {
 
     resolve() {
         return async (ctx: Context, next: NextFunction) => {
-            const authorization: string = ctx.header['Authorization'] as string
+            const authorization: string = ctx.get('Authorization')
+            const staffID: string = ctx.get('AssignTo').trim()
 
             const authArr = authorization.split(' ')
 
-            if (authArr.length !== 2) {
+            if (authArr.length !== 2 || staffID === '') {
                 ctx.setAttr(this.AUTH_FLAG, null)
                 return
             }
 
             const tokenStr = authArr[1]
 
-            const token = await this.authService.lookUpAccessToken(tokenStr)
+            const token = await this.authService.lookUpAccessToken(
+                staffID,
+                tokenStr
+            )
             if (!token.isValid()) {
                 ctx.setAttr(this.AUTH_FLAG, null)
             }
