@@ -12,6 +12,9 @@ import * as crossDomain from '@midwayjs/cross-domain'
 import { ReportMiddleware } from './middleware/report.middleware'
 import { ExceptionMiddleware } from './middleware/exception.middleware'
 import { RespMiddleware } from './middleware/resp.middleware'
+import { NotFoundFilter } from './filter/notfound.filter'
+import { DefaultErrorFilter } from './filter/default.filter'
+import 'tsconfig-paths/register'
 
 @Configuration({
     imports: [
@@ -39,6 +42,6 @@ export class ContainerLifeCycle {
             AuthMiddleware,
         ])
         // add filter
-        // this.app.useFilter([NotFoundFilter, DefaultErrorFilter]);
+        this.app.useFilter([NotFoundFilter, DefaultErrorFilter])
     }
 }
