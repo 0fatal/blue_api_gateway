@@ -9,6 +9,9 @@ import 'tsconfig-paths/register'
 import * as orm from '@midwayjs/orm'
 import { AuthMiddleware } from '@/middleware/auth/auth.middleware'
 import * as crossDomain from '@midwayjs/cross-domain'
+import { ReportMiddleware } from './middleware/report.middleware'
+import { ExceptionMiddleware } from './middleware/exception.middleware'
+import { RespMiddleware } from './middleware/resp.middleware'
 
 @Configuration({
     imports: [
@@ -29,7 +32,12 @@ export class ContainerLifeCycle {
 
     async onReady() {
         // add middleware
-        this.app.useMiddleware([AuthMiddleware])
+        this.app.useMiddleware([
+            ReportMiddleware,
+            RespMiddleware,
+            ExceptionMiddleware,
+            AuthMiddleware,
+        ])
         // add filter
         // this.app.useFilter([NotFoundFilter, DefaultErrorFilter]);
     }
