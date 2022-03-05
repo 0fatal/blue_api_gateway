@@ -1,4 +1,6 @@
 {
     "editor.formatOnSave": true,
-    "editor.formatOnType": true
+    "editor.formatOnType": true,
+    "jest.pathToJest": "node --require=ts-node/register ./node_modules/.bin/jest --detectOpenHandles",
+    "jestrunner.jestCommand": "node --require=ts-node/register ./node_modules/.bin/jest --detectOpenHandles"
 }
