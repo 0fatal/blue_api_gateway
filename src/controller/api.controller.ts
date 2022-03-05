@@ -1,11 +1,12 @@
 import { Response, ServiceResp } from '@/dto/response'
 import { CustomException } from '@/exception'
 import { RouteItem } from '@/model/routerItem/routeItem'
-import { RouteItemService } from '@/service/RouteItem/RouteItem'
-import { Inject, Controller, All } from '@midwayjs/decorator'
+import { RouteItemService } from '@/service/RouteItem/RouteItem.service'
+import { Inject, Controller, All, Provide } from '@midwayjs/decorator'
 import { Context } from '@midwayjs/koa'
 import request = require('superagent')
 
+@Provide()
 @Controller('/v1')
 export class APIController {
     @Inject()

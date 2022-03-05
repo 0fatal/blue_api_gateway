@@ -88,12 +88,16 @@ export class Response<T extends ResponseType> {
         defineProperties(this, props)
     }
 
-    static MakeJSONSuccess(data: any): Response<ResponseType.JSON> {
+    static MakeJSONSuccess(
+        data: any,
+        msg: string = 'success'
+    ): Response<ResponseType.JSON> {
         return new Response({
             type: ResponseType.JSON,
             JSON: {
                 code: 0,
                 data: data,
+                msg: msg,
                 httpCode: 200,
             },
         })

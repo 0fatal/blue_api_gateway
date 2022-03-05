@@ -1,9 +1,7 @@
-import { AuthResp, Response, ResponseType } from '@/dto/response'
-import { AuthService } from '@/service/Auth/Auth.service'
+import { Response, ResponseType } from '@/dto/response'
 import { IMiddleware } from '@midwayjs/core'
-import { Config, Inject, Middleware } from '@midwayjs/decorator'
+import { Middleware } from '@midwayjs/decorator'
 import { Context, NextFunction } from '@midwayjs/koa'
-import { networkInterfaces } from 'os'
 
 @Middleware()
 export class RespMiddleware implements IMiddleware<Context, NextFunction> {

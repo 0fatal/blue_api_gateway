@@ -58,7 +58,7 @@ export class CustomException extends Error {
 
     static Make<T extends keyof typeof BasicExceptionType>(
         type: T,
-        payload?: string
+        payload?: any
     ): CustomException {
         return new CustomException({ ...BasicExceptionType[type], payload })
     }
