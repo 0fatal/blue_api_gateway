@@ -30,10 +30,10 @@ export const BasicExceptionType = {
 } as const
 
 export class CustomException extends Error {
-    private errCode?: number
-    private err?: string
-    private httpCode?: number = 500
-    private payload?: string
+    errCode?: number
+    err?: string
+    httpCode?: number = 500
+    payload?: any
 
     constructor(props: ClassPropertyWithExcludeExtend<CustomException, Error>) {
         super()
