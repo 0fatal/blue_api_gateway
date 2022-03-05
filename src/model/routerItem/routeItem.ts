@@ -32,20 +32,34 @@ export class RouteItem extends BaseEntityModel {
     needRedirect: boolean
 
     @Column({
-        array: true,
         type: 'varchar',
-        length: 20,
+        length: 512,
         comment: '需要转发的请求头',
-        default: [],
+        default: '',
+        transformer: {
+            from: (value: string[]) => {
+                return value.join(',')
+            },
+            to: (value: string) => {
+                return value.split(',')
+            },
+        },
     })
     DirectThroughRequestHeaders: string[]
 
     @Column({
-        array: true,
         type: 'varchar',
-        length: 20,
+        length: 512,
         comment: '需要转发的响应头',
-        default: [],
+        default: '',
+        transformer: {
+            from: (value: string[]) => {
+                return value.join(',')
+            },
+            to: (value: string) => {
+                return value.split(',')
+            },
+        },
     })
     DirectThroughResponseHeaders: string[]
 
