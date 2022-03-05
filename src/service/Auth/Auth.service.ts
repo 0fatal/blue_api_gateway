@@ -1,14 +1,13 @@
 import { AuthResp } from '@/dto/response'
 import { AccessToken } from '@/model/accessToken/accessToken'
 import { User } from '@/model/user/user'
-import { modelFromJson } from '@/utils/base'
 import { Config, Provide } from '@midwayjs/decorator'
 import { InjectEntityModel } from '@midwayjs/orm'
 import { randomUUID } from 'crypto'
 import { Context } from 'koa'
 import { MoreThan, Repository } from 'typeorm'
-import * as bcrypt from 'bcrypt'
 import { CustomException } from '@/exception'
+import MD5 from 'crypto-js/md5'
 
 @Provide('auth_service')
 export class AuthService {
@@ -60,9 +59,7 @@ export class AuthService {
         staffID: string,
         password: string
     ): Promise<User | undefined> {
-        const salt = bcrypt.genSaltSync(10)
-        const hash = bcrypt.hashSync(password, salt)
-
+        const hash = MD5(password + 'blue_api_gateway').toString()
         return await this.userModel.findOne({
             where: {
                 staffID,
@@ -71,13 +68,22 @@ export class AuthService {
         })
     }
 
-    async registerUser(user: User): Promise<boolean> {
-        const salt = bcrypt.genSaltSync(10)
-        const hash = bcrypt.hashSync(user.password, salt)
-        user.password = hash
+    async registerUser(
+        staffID: string,
+        password: string,
+        nickname: string
+    ): Promise<boolean> {
+        const hash = MD5(password + 'blue_api_gateway').toString()
+        password = hash
+        const user = new User({
+            staffID,
+            password,
+            nickname,
+        })
         try {
             await this.userModel.insert(user)
         } catch (error) {
+            console.log(error)
             throw new CustomException({
                 httpCode: 400,
                 err: 'user has been registered',
@@ -126,7 +132,7 @@ export class AuthService {
     }
 
     getAuthStatus(ctx: Context): AuthResp {
-        const auth = modelFromJson<AuthResp>(ctx.getAttr(this.AUTH_FLAG))
+        const auth = ctx.getAttr(this.AUTH_FLAG)
         if (!auth) {
             return AuthResp.makeAuthNotFound()
         }

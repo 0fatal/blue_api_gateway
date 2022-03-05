@@ -26,6 +26,10 @@ export class AuthController {
             loginRequest.password
         )
 
+        if (!user) {
+            return Response.MakeJSONError(200, -1, '用户名或密码错误')
+        }
+
         if (!user.checkIfAllowLogin()) {
             throw CustomException.Make('FORBIDDEN', 'not allow login')
         }
@@ -46,6 +50,7 @@ export class AuthController {
     @Validate()
     async getTokenInfo() {
         const auth = this.authService.getAuthStatus(this.ctx)
+        console.log(auth)
         if (!auth || !auth.found) {
             return Response.MakeJSONSuccess(
                 {
