@@ -4,15 +4,18 @@ import { IMiddleware } from '@midwayjs/core'
 import { Middleware } from '@midwayjs/decorator'
 import { Context, NextFunction } from '@midwayjs/koa'
 
+// TODO handle Error
 @Middleware()
 export class ExceptionMiddleware implements IMiddleware<Context, NextFunction> {
     resolve() {
         return async (ctx: Context, next: NextFunction) => {
+            let res: any
             try {
-                await next()
+                res = await next()
             } catch (error) {
                 if (error instanceof CustomException) {
                     const err = error as CustomException
+                    ctx.logger.error(err.toString())
                     ctx.status = err.httpCode
 
                     if (err.payload instanceof Response) {
@@ -24,7 +27,9 @@ export class ExceptionMiddleware implements IMiddleware<Context, NextFunction> {
                         data: {},
                     }
                 }
+                throw error
             }
+            return res
         }
     }
 }
