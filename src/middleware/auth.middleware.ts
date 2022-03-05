@@ -1,7 +1,7 @@
 import { AuthResp } from '@/dto/response'
 import { AuthService } from '@/service/Auth/Auth.service'
 import { IMiddleware } from '@midwayjs/core'
-import { Config, Inject, Middleware } from '@midwayjs/decorator'
+import { Config, Middleware } from '@midwayjs/decorator'
 import { Context, NextFunction } from '@midwayjs/koa'
 
 @Middleware()
@@ -9,11 +9,11 @@ export class AuthMiddleware implements IMiddleware<Context, NextFunction> {
     @Config('authService.AUTH_FLAG')
     AUTH_FLAG: string
 
-    @Inject()
-    authService: AuthService
-
     resolve() {
         return async (ctx: Context, next: NextFunction) => {
+            const authService = await ctx.requestContext.getAsync<AuthService>(
+                AuthService
+            )
             const authorization: string = ctx.get('Authorization')
             const staffID: string = ctx.get('AssignTo').trim()
 
@@ -21,19 +21,19 @@ export class AuthMiddleware implements IMiddleware<Context, NextFunction> {
 
             if (authArr.length !== 2 || staffID === '') {
                 ctx.setAttr(this.AUTH_FLAG, null)
-                return
+                return await next()
             }
 
             const tokenStr = authArr[1]
 
-            const token = await this.authService.lookUpAccessToken(
-                staffID,
-                tokenStr
-            )
+            const token = await authService.lookUpAccessToken(staffID, tokenStr)
             if (!token.isValid()) {
                 ctx.setAttr(this.AUTH_FLAG, null)
             }
+
+            console.log(token)
             ctx.setAttr(this.AUTH_FLAG, AuthResp.makeSuccessAuth(token))
+            return await next()
         }
     }
 }

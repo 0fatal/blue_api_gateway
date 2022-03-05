@@ -1,3 +1,5 @@
+import { ClassProperty } from '@/types'
+import { defineProperties } from '@/utils/base'
 import { EntityModel } from '@midwayjs/orm'
 import { Column } from 'typeorm'
 import { BaseEntityModel } from '../BaseEntityModel'
@@ -8,7 +10,6 @@ export class User extends BaseEntityModel {
     staffID: string
 
     @Column({
-        select: false,
         comment: '密码',
         length: 32,
         type: 'char',
@@ -28,5 +29,10 @@ export class User extends BaseEntityModel {
 
     checkIfAllowLogin(): boolean {
         return this.status === 0
+    }
+
+    constructor(props: ClassProperty<User>) {
+        super()
+        defineProperties(this, props)
     }
 }

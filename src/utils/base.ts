@@ -4,10 +4,8 @@ export function defineProperties<T>(
     self: ThisType<T>,
     props: ClassProperty<T>
 ) {
-    for (let key in self) {
-        if (key in props) {
-            self[key] = props[key]
-        }
+    for (let key in props) {
+        self[key] = props[key]
     }
 }
 

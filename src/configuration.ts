@@ -7,7 +7,7 @@ import { join } from 'path'
 // import { NotFoundFilter } from './filter/notfound.filter';
 import 'tsconfig-paths/register'
 import * as orm from '@midwayjs/orm'
-import { AuthMiddleware } from '@/middleware/auth/auth.middleware'
+import { AuthMiddleware } from '@/middleware/auth.middleware'
 import * as crossDomain from '@midwayjs/cross-domain'
 import { ReportMiddleware } from './middleware/report.middleware'
 import { ExceptionMiddleware } from './middleware/exception.middleware'

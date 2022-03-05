@@ -60,18 +60,17 @@ export enum ResponseType {
 
 export class Response<T extends ResponseType> {
     type: T
+    httpCode?: number
     JSON: T extends ResponseType.JSON
         ? {
               code: number
               data?: any
               msg?: string
-              httpCode?: number
           }
         : never
 
     redirect: T extends ResponseType.REDIRECT
         ? {
-              httpCode: number
               url: string
           }
         : never
@@ -98,8 +97,8 @@ export class Response<T extends ResponseType> {
                 code: 0,
                 data: data,
                 msg: msg,
-                httpCode: 200,
             },
+            httpCode: 200,
         })
     }
 
@@ -113,8 +112,9 @@ export class Response<T extends ResponseType> {
             JSON: {
                 code: code,
                 msg: msg,
-                httpCode: httpCode,
             },
+
+            httpCode: httpCode,
         })
     }
 
@@ -130,8 +130,8 @@ export class Response<T extends ResponseType> {
                 code: code,
                 msg: msg,
                 data: data,
-                httpCode: httpCode,
             },
+            httpCode: httpCode,
         })
     }
 
@@ -140,8 +140,8 @@ export class Response<T extends ResponseType> {
             type: ResponseType.REDIRECT,
             redirect: {
                 url: url,
-                httpCode: 302,
             },
+            httpCode: 302,
         })
     }
 
@@ -163,6 +163,7 @@ export class Response<T extends ResponseType> {
     static MakeDirect(data: any): Response<ResponseType.DIRECT> {
         return new Response({
             type: ResponseType.DIRECT,
+            httpCode: 200,
         })
     }
 }

@@ -10,6 +10,7 @@ export class RespMiddleware implements IMiddleware<Context, NextFunction> {
             const resp = await next()
             if (resp instanceof Response) {
                 const b = resp as Response<any>
+                ctx.status = b.httpCode
                 if (b.type === ResponseType.JSON) {
                     return b.JSON
                 }
