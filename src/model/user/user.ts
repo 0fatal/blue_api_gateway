@@ -18,7 +18,7 @@ export class User extends BaseEntityModel {
     password: string
 
     @Column({ comment: '昵称', length: 20, type: 'varchar', nullable: false })
-    nickname: string
+    username: string
 
     @Column({
         type: 'tinyint',
@@ -26,6 +26,34 @@ export class User extends BaseEntityModel {
         comment: '账号状态：0-正常，1-禁用',
     })
     status: number
+
+    @Column({
+        type: 'text',
+        comment: '个人简介',
+    })
+    intro: string
+
+    @Column({
+        type: 'char',
+        length: 11,
+        comment: '手机号',
+        nullable: false,
+    })
+    phone: string
+
+    @Column({
+        length: 255,
+        type: 'varchar',
+        comment: '头像',
+    })
+    avatar: string
+
+    @Column({
+        type: 'tinyint',
+        nullable: false,
+        comment: '0:学生 1:导师 2:管理员',
+    })
+    role: string
 
     checkIfAllowLogin(): boolean {
         return this.status === 0

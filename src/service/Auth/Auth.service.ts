@@ -71,14 +71,14 @@ export class AuthService {
     async registerUser(
         staffID: string,
         password: string,
-        nickname: string
+        username: string
     ): Promise<boolean> {
         const hash = MD5(password + 'blue_api_gateway').toString()
         password = hash
         const user = new User({
             staffID,
             password,
-            nickname,
+            username,
         })
         try {
             await this.userModel.insert(user)
