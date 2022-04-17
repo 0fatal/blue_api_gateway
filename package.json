@@ -18,7 +18,8 @@
     "crypto-js": "^4.1.1",
     "mysql2": "^2.3.3",
     "superagent": "^7.1.1",
-    "typeorm": "^0.2.44"
+    "typeorm": "^0.2.44",
+    "typeorm-naming-strategies": "^4.1.0"
   },
   "devDependencies": {
     "@midwayjs/cli": "^1.2.90",

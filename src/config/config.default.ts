@@ -1,4 +1,5 @@
 import { MidwayConfig } from '@midwayjs/core'
+import { SnakeNamingStrategy } from 'typeorm-naming-strategies'
 
 export default {
     // use for cookie sign key, should change to your own and keep security
@@ -13,11 +14,12 @@ export default {
     orm: {
         synchronize: true,
         type: 'mysql',
-        host: 'localhost',
-        port: 3306,
+        host: '121.36.224.18',
+        port: 22223,
         username: 'root',
-        password: '123456',
-        database: 'blue_api_gateway',
+        password: 'root22223',
+        database: 'blue_dev',
+        namingStrategy: new SnakeNamingStrategy(),
     },
     cors: {
         credentials: false,
