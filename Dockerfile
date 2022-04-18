@@ -27,4 +27,4 @@ RUN npm install --production
 
 EXPOSE 7001
 
-CMD ["npm", "run", "online"]
+CMD ["npm", "run", "start"]
