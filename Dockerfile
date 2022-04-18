@@ -2,14 +2,11 @@ FROM node:14 AS build
 
 WORKDIR /app
 
-RUN npm install pnpm -g
-
 COPY . .
 
+RUN npm install 
 
-RUN pnpm install 
-
-RUN pnpm run build
+RUN npm run build
 
 FROM node:14-alpine
 
