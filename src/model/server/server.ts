@@ -2,7 +2,7 @@ import { EntityModel } from '@midwayjs/orm'
 import { Column } from 'typeorm'
 import { BaseEntityModel } from '../BaseEntityModel'
 
-@EntityModel('server_dev')
+@EntityModel('server')
 export class Server extends BaseEntityModel {
     @Column({ length: 255, type: 'varchar', nullable: false })
     addr: string
