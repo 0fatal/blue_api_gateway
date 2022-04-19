@@ -16,9 +16,10 @@ export class ExceptionMiddleware implements IMiddleware<Context, NextFunction> {
                 if (error instanceof CustomException) {
                     const err = error as CustomException
                     ctx.logger.error(err.toString())
+                    console.log('httpCode', err.httpCode)
                     ctx.status = err.httpCode
-
                     if (err.payload instanceof Response) {
+                        console.log(err)
                         return err.payload
                     }
                     return {

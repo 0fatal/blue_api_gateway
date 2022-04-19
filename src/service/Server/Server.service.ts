@@ -9,6 +9,10 @@ export class ServerService {
     serverModel: Repository<Server>
 
     async getServer(key: string): Promise<Server> {
-        return await this.serverModel.findOne(key)
+        return await this.serverModel.findOne({
+            where: {
+                key,
+            },
+        })
     }
 }

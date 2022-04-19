@@ -1,4 +1,4 @@
-import { Response, ServiceResp } from '@/dto/response'
+import { Response, ResponseType, ServiceResp } from '@/dto/response'
 import { CustomException } from '@/exception'
 import { RouteItem } from '@/model/routerItem/routeItem'
 import { RouteItemService } from '@/service/RouteItem/RouteItem.service'
@@ -18,14 +18,15 @@ export class APIController {
     @All('/*')
     async forwardRequest() {
         const path = this.ctx.path
-        const pathSplit = path.split('/', 3)
+        const pathSplit = path.split('/')
         const method = this.ctx.method
 
-        if (pathSplit.length !== 3) {
+        if (pathSplit.length < 4) {
             throw CustomException.Make('NOT_FOUND')
         }
-        const father = pathSplit[1]
-        const location = pathSplit[2]
+        const father = pathSplit[2]
+        const location = '/' + pathSplit.slice(3).join('/')
+        console.log(father, location)
 
         const rt = await this.routeItemService.getRouteItem(
             father,
@@ -37,15 +38,18 @@ export class APIController {
             throw CustomException.Make('NOT_FOUND')
         }
 
-        rt.checkScope(this.ctx)
+        this.routeItemService.checkScope(rt)
 
-        const req = rt.makeNewRemoteRequest()
+        const req = (await this.routeItemService.makeNewRemoteRequest(rt))()
 
         const setRequestHeader = (
             ctx: Context,
             req: request.Request,
             rt: RouteItem
         ) => {
+            if (rt.needAuthorized) {
+                req.set('staffID', ctx.staffID)
+            }
             for (const headerName of rt.DirectThroughRequestHeaders) {
                 const headerValue = ctx.header[headerName]
                 req.set(headerName, headerValue as string)
@@ -67,14 +71,19 @@ export class APIController {
 
         const setBody = (ctx: Context, req: request.Request, rt: RouteItem) => {
             const body = ctx.request.body
+            const query = ctx.request.query
             if (body) {
                 req.send(body)
+            }
+            if (query) {
+                req.query(query)
             }
         }
 
         setRequestHeader(this.ctx, req, rt)
         setBody(this.ctx, req, rt)
         const resp = await req
+        console.log(resp.body)
         if (resp.error) {
             throw CustomException.Make('SERVER_ERROR', resp.error.text)
         }
@@ -113,7 +122,19 @@ export class APIController {
             })
         }
 
-        const r = Response.MakeJSONSuccess(respBody.data)
+        let r: Response<ResponseType.JSON>
+
+        if (respBody.code === 0) {
+            r = Response.MakeJSONSuccess(respBody.data)
+        } else {
+            r = Response.MakeJSONErrorWithData(
+                200,
+                respBody.code,
+                respBody.msg,
+                respBody.data
+            )
+        }
+
         copyHeaderFromResp(this.ctx, resp, rt)
 
         return r.JSON

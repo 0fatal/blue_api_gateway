@@ -59,7 +59,7 @@ export class AuthService {
         staffID: string,
         password: string
     ): Promise<User | undefined> {
-        const hash = MD5(password + 'blue_api_gateway').toString()
+        const hash = MD5(password).toString()
         return await this.userModel.findOne({
             where: {
                 staffID,
@@ -73,7 +73,7 @@ export class AuthService {
         password: string,
         username: string
     ): Promise<boolean> {
-        const hash = MD5(password + 'blue_api_gateway').toString()
+        const hash = MD5(password).toString()
         password = hash
         const user = new User({
             staffID,
@@ -133,6 +133,7 @@ export class AuthService {
 
     getAuthStatus(ctx: Context): AuthResp {
         const auth = ctx.getAttr(this.AUTH_FLAG)
+        console.log(auth, this.AUTH_FLAG)
         if (!auth) {
             return AuthResp.makeAuthNotFound()
         }

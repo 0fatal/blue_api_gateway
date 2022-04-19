@@ -1,12 +1,6 @@
-import { CustomException } from '@/exception'
-import { AuthService } from '@/service/Auth/Auth.service'
-import { ServerService } from '@/service/Server/Server.service'
 import { ClassPropertyWithExcludeExtend } from '@/types'
 import { defineProperties } from '@/utils/base'
-import { Inject } from '@midwayjs/decorator'
-import { Context } from '@midwayjs/koa'
 import { EntityModel } from '@midwayjs/orm'
-import request = require('superagent')
 import { Column, Index } from 'typeorm'
 import { BaseEntityModel } from '../BaseEntityModel'
 
@@ -34,13 +28,15 @@ export class RouteItem extends BaseEntityModel {
     @Column({
         type: 'varchar',
         length: 512,
-        comment: '需要转发的请求头',
+        comment: '需要转发的请求头,以逗号分隔',
         default: '',
         transformer: {
-            from: (value: string[]) => {
+            to: (value: string[]) => {
+                console.log(value)
                 return value.join(',')
             },
-            to: (value: string) => {
+            from: (value: string) => {
+                if (value === '') return []
                 return value.split(',')
             },
         },
@@ -50,13 +46,14 @@ export class RouteItem extends BaseEntityModel {
     @Column({
         type: 'varchar',
         length: 512,
-        comment: '需要转发的响应头',
+        comment: '需要转发的响应头，以逗号分隔',
         default: '',
         transformer: {
-            from: (value: string[]) => {
+            to: (value: string[]) => {
                 return value.join(',')
             },
-            to: (value: string) => {
+            from: (value: string) => {
+                if (value === '') return []
                 return value.split(',')
             },
         },
@@ -79,41 +76,10 @@ export class RouteItem extends BaseEntityModel {
     })
     father: string
 
-    @Inject()
-    serverService: ServerService
-
-    @Inject()
-    authService: AuthService
-
-    async remoteUrl(): Promise<URL> {
-        // return ''
-        const server = await this.serverService.getServer(this.father)
-        if (!server) {
-            throw CustomException.Make('BAD_REQUEST', 'can not find server')
-        }
-        const u = new URL(server.addr)
-        u.pathname = this.remote
-        return u
-    }
-
     constructor(
         props: ClassPropertyWithExcludeExtend<RouteItem, BaseEntityModel>
     ) {
         super()
         defineProperties(this, props)
-    }
-
-    makeNewRemoteRequest(): request.SuperAgentRequest {
-        const req = request(this.method, this.remoteUrl().toString())
-        return req
-    }
-
-    checkScope(ctx: Context) {
-        if (this.needAuthorized) {
-            const authStatus = this.authService.getAuthStatus(ctx)
-            if (!authStatus.isValid()) {
-                throw CustomException.Make('UNAUTHORIZED')
-            }
-        }
     }
 }

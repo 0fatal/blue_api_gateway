@@ -15,7 +15,7 @@ export class AuthResp {
     }
 
     isValid() {
-        return this.err === '' && this.token && this.token.isValid()
+        return !this.err && this.token && this.token.isValid()
     }
 
     WarpProxyRequestHeader(ctx: Context) {

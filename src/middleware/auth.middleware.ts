@@ -14,7 +14,7 @@ export class AuthMiddleware implements IMiddleware<Context, NextFunction> {
             const authService = await ctx.requestContext.getAsync<AuthService>(
                 AuthService
             )
-            const authorization: string = ctx.get('Authorization')
+            const authorization: string = ctx.get('Authorization').trim()
             const staffID: string = ctx.get('AssignTo').trim()
 
             const authArr = authorization.split(' ')
@@ -31,8 +31,9 @@ export class AuthMiddleware implements IMiddleware<Context, NextFunction> {
                 ctx.setAttr(this.AUTH_FLAG, null)
             }
 
-            console.log(token)
+            console.log('token', token, this.AUTH_FLAG)
             ctx.setAttr(this.AUTH_FLAG, AuthResp.makeSuccessAuth(token))
+            ctx.staffID = token.staffID
             return await next()
         }
     }
