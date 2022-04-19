@@ -27,8 +27,9 @@ export class AuthMiddleware implements IMiddleware<Context, NextFunction> {
             const tokenStr = authArr[1]
 
             const token = await authService.lookUpAccessToken(staffID, tokenStr)
-            if (!token.isValid()) {
+            if (!token?.isValid()) {
                 ctx.setAttr(this.AUTH_FLAG, null)
+                return await next()
             }
 
             console.log('token', token, this.AUTH_FLAG)
