@@ -39,7 +39,7 @@ export class AuthService {
     }
 
     async lookUpAccessToken(
-        staffID: string,
+        // staffID: string,
         tokenStr: string
     ): Promise<AccessToken | undefined> {
         if (tokenStr === '') {
@@ -48,7 +48,7 @@ export class AuthService {
 
         return await this.accessTokenModel.findOne({
             where: {
-                staffID: staffID,
+                // staffID: staffID,
                 accessToken: tokenStr,
                 expiredTime: MoreThan(new Date()),
             },

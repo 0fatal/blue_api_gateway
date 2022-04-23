@@ -15,18 +15,20 @@ export class AuthMiddleware implements IMiddleware<Context, NextFunction> {
                 AuthService
             )
             const authorization: string = ctx.get('Authorization').trim()
-            const staffID: string = ctx.get('AssignTo').trim()
+            // const staffID: string = ctx.get('AssignTo').trim()
 
             const authArr = authorization.split(' ')
 
-            if (authArr.length !== 2 || staffID === '') {
+            // authArr.length !== 2 || staffID === ''
+            if (authArr.length !== 2) {
                 ctx.setAttr(this.AUTH_FLAG, null)
                 return await next()
             }
 
             const tokenStr = authArr[1]
 
-            const token = await authService.lookUpAccessToken(staffID, tokenStr)
+            // const token = await authService.lookUpAccessToken(staffID, tokenStr)
+            const token = await authService.lookUpAccessToken(tokenStr)
             if (!token?.isValid()) {
                 ctx.setAttr(this.AUTH_FLAG, null)
                 return await next()
