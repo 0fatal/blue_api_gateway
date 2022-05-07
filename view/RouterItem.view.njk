@@ -1,0 +1,71 @@
+{% extends 'base.html' %}
+{% block header %}
+    <title>网关路由表</title>
+    <style>
+        table,
+        table tr th,
+        table tr td {
+            border: 1px solid #0094ff;
+        }
+        table {
+            min-height: 25px;
+            line-height: 25px;
+            border-collapse: collapse;
+            padding: 2px;
+        }
+    </style>
+{% endblock %}
+{% block body %}
+    <h1>网关路由表</h1>
+    <hr/> <pre><h3>请求说明：</h3>
+        请求地址：{{ request.header.host }}/v1 + 前端请求地址
+        Header：
+            Authorization: bearer token
+
+        示例：{{ request.header.host }}/v1/class/teacher/info
+
+        <u> <strong>⚠️ 注意： 
+            1. 只支持GET、POST请求，其他的请求请全部用POST
+            2. 需要授权意味着 一旦网关验证登录成功，就会给后端子项目的header附加请求头：
+
+                <code>staffID：用户ID</code>
+
+            用户ID是必定正确的，不需要再校验，如果需要知道是谁，可以查用户表
+        </strong></u>
+    </pre>
+    {% for k, subRoutes in routes %}
+        <table border="1">
+            <thead>
+                <tr>
+                    <th>命名空间(father)</th>
+                    <th>方法(method)</th>
+                    <th>前端请求地址(location)</th>
+                    <th>后端路由定义（转发目标）(remote)</th>
+                    <th style="width:80px">是否需要授权</th>
+                    <th style="width:80px">需要转发的请求头(direct_through_request_headers)</th>
+                    <th style="width:80px">需要转发的响应头(direct_through_response_headers)</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for route in subRoutes %}
+                    <tr>
+                        <td>{{ route.father }}</td>
+                        <td>{{ route.method }}</td>
+                        <td>/{{ route.father + route.location }}</td>
+                        <td>/{{ route.father + route.remote }}</td>
+                        <td style="text-align:center;">
+                            {% if route.needAuthorized %}
+                                是
+                            {% else %}
+                                否
+                            {% endif %}
+                        </td>
+                        <td>
+                            {{ route.DirectThroughRequestHeaders | join(', ') }}
+                        </td>
+                        <td>{{ route.DirectThroughResponseHeaders | join(', ') }}</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table><br/> <br/> <br/> <br/>{% endfor %}
+{% endblock %}

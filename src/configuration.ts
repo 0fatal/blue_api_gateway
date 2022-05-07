@@ -14,6 +14,7 @@ import { ExceptionMiddleware } from './middleware/exception.middleware'
 import { RespMiddleware } from './middleware/resp.middleware'
 import { NotFoundFilter } from './filter/notfound.filter'
 import { DefaultErrorFilter } from './filter/default.filter'
+import * as view from '@midwayjs/view-nunjucks'
 import 'tsconfig-paths/register'
 
 @Configuration({
@@ -21,6 +22,7 @@ import 'tsconfig-paths/register'
         koa,
         validate,
         orm,
+        view,
         crossDomain,
         {
             component: info,

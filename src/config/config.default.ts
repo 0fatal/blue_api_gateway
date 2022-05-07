@@ -27,4 +27,10 @@ export default {
         allowMethods: '*',
         origin: '*',
     },
+    view: {
+        defaultViewEngine: 'nunjucks',
+        mapping: {
+            '.nj': 'nunjucks',
+        },
+    },
 } as MidwayConfig

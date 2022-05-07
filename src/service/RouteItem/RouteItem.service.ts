@@ -60,4 +60,8 @@ export class RouteItemService {
             }
         }
     }
+
+    async getRouteItemList() {
+        return await this.routeItemModel.find()
+    }
 }
