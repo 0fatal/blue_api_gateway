@@ -13,6 +13,7 @@ FROM node:14-alpine
 WORKDIR /app
 
 COPY --from=build /app/dist ./dist
+COPY --from=build /app/view ./view
 COPY --from=build /app/bootstrap.js ./
 COPY --from=build /app/package.json ./
 
