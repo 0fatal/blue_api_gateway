@@ -1,4 +1,6 @@
 import { MidwayConfig } from '@midwayjs/core'
+import { tmpdir } from 'os'
+import { join } from 'path'
 import { SnakeNamingStrategy } from 'typeorm-naming-strategies'
 
 export default {
@@ -32,5 +34,22 @@ export default {
         mapping: {
             '.nj': 'nunjucks',
         },
+    },
+    cos: {
+        // normal oss bucket
+        client: {
+            SecretId: 'AKIDkLl4D8ILG8qKcgU23qPilY6OSJwJRqzv',
+            SecretKey: 'lJekdHhGc5LOEqEPN7dzA9uQghT3OUMz',
+        },
+    },
+    upload: {
+        mode: 'file',
+        fileSize: '5mb',
+        // whitelist: string[]，文件扩展名白名单
+        whitelist: ['.jpg', '.jpeg', '.png', '.gif', '.bmp', '.webp'],
+        // tmpdir: string，上传的文件临时存储路径
+        tmpdir: join(tmpdir(), 'blue-upload-files'),
+        // cleanTimeout: number，上传的文件在临时目录中多久之后自动删除，默认为 5 分钟
+        cleanTimeout: 5 * 60 * 1000,
     },
 } as MidwayConfig

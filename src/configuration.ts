@@ -16,6 +16,8 @@ import { NotFoundFilter } from './filter/notfound.filter'
 import { DefaultErrorFilter } from './filter/default.filter'
 import * as view from '@midwayjs/view-nunjucks'
 import 'tsconfig-paths/register'
+import * as upload from '@midwayjs/upload'
+import * as cos from '@midwayjs/cos'
 
 @Configuration({
     imports: [
@@ -23,6 +25,8 @@ import 'tsconfig-paths/register'
         validate,
         orm,
         view,
+        cos,
+        upload,
         crossDomain,
         {
             component: info,
