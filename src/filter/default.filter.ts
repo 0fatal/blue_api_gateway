@@ -9,7 +9,7 @@ export class DefaultErrorFilter {
         ctx.status = 500
         return {
             code: -1,
-            msg: 'internal error',
+            msg: err.message,
         }
     }
 }
